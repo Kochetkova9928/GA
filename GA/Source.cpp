@@ -1,28 +1,28 @@
-#include <iostream> // для cout и т.п.
-#include <vector> // для класса vector
-#include <string> // для класса string
-#include <algorithm> // для алгоритма сортировки
-#include <time.h> // для случайных величин
-#include <math.h> // для abs()
+#include <iostream> // РґР»СЏ cout Рё С‚.Рї.
+#include <vector> // РґР»СЏ РєР»Р°СЃСЃР° vector
+#include <string> // РґР»СЏ РєР»Р°СЃСЃР° string
+#include <algorithm> // РґР»СЏ Р°Р»РіРѕСЂРёС‚РјР° СЃРѕСЂС‚РёСЂРѕРІРєРё
+#include <time.h> // РґР»СЏ СЃР»СѓС‡Р°Р№РЅС‹С… РІРµР»РёС‡РёРЅ
+#include <math.h> // РґР»СЏ abs()
 
-#define GA_SIZE 3000 // размер популяции
-#define GA_MAXITER 20000 // максимальное число итераций
-#define GA_BEST 0.2f // лучшие
-#define GA_MUT 0.5f // мутации
+#define GA_SIZE 3000 // СЂР°Р·РјРµСЂ РїРѕРїСѓР»СЏС†РёРё
+#define GA_MAXITER 20000 // РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ С‡РёСЃР»Рѕ РёС‚РµСЂР°С†РёР№
+#define GA_BEST 0.2f // Р»СѓС‡С€РёРµ
+#define GA_MUT 0.5f // РјСѓС‚Р°С†РёРё
 #define GA_MUTATION RAND_MAX * GA_MUT
-#define GA_TARGET std::string("МИР")
-const std::string GA_TABLE = " абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+#define GA_TARGET std::string("РњРР ")
+const std::string GA_TABLE = " Р°Р±РІРіРґРµС‘Р¶Р·РёР№РєР»РјРЅРѕРїСЂСЃС‚СѓС„С…С†С‡С€С‰СЉС‹СЊСЌСЋСЏРђР‘Р’Р“Р”Р•РЃР–Р—РР™РљР›РњРќРћРџР РЎРўРЈР¤РҐР¦Р§РЁР©РЄР«Р¬Р­Р®РЇ";
 
 
 using namespace std;
 
 struct ga_struct
 {
-	string str; // строка
-	unsigned int rating; // пригодность
+	string str; // СЃС‚СЂРѕРєР°
+	unsigned int rating; // РїСЂРёРіРѕРґРЅРѕСЃС‚СЊ
 };
 
-// формиирование первой (начальной) популяции
+// С„РѕСЂРјРёРёСЂРѕРІР°РЅРёРµ РїРµСЂРІРѕР№ (РЅР°С‡Р°Р»СЊРЅРѕР№) РїРѕРїСѓР»СЏС†РёРё
 void first_population(vector<ga_struct>& population, vector<ga_struct>& buffer) {
 	int target_size = GA_TARGET.size();
 
@@ -42,7 +42,7 @@ void first_population(vector<ga_struct>& population, vector<ga_struct>& buffer) 
 	buffer.resize(GA_SIZE);
 }
 
-// оценка популяции (пригодность)
+// РѕС†РµРЅРєР° РїРѕРїСѓР»СЏС†РёРё (РїСЂРёРіРѕРґРЅРѕСЃС‚СЊ)
 void calc_rating(vector<ga_struct>& population) {
 	string target = GA_TARGET;
 	int target_size = target.size();
@@ -58,17 +58,17 @@ void calc_rating(vector<ga_struct>& population) {
 	}
 }
 
-// компаратор
+// РєРѕРјРїР°СЂР°С‚РѕСЂ
 bool sort_by_rating_comp(ga_struct a, ga_struct b) {
 	return (a.rating < b.rating);
 }
 
-// сортировка популяций по оценке
+// СЃРѕСЂС‚РёСЂРѕРІРєР° РїРѕРїСѓР»СЏС†РёР№ РїРѕ РѕС†РµРЅРєРµ
 inline void sort_by_rating(vector<ga_struct>& population) {
 	sort(population.begin(), population.end(), sort_by_rating_comp);
 }
 
-// селекция
+// СЃРµР»РµРєС†РёСЏ
 void selection(vector<ga_struct>& population, vector<ga_struct>& buffer, int best_size) {
 	for (int i = 0; i < best_size; i++) {
 		buffer[i].str = population[i].str;
@@ -76,7 +76,7 @@ void selection(vector<ga_struct>& population, vector<ga_struct>& buffer, int bes
 	}
 }
 
-// мутация
+// РјСѓС‚Р°С†РёСЏ
 void mutate(ga_struct& member) {
 	int target_size = GA_TARGET.size();
 	int ipos = rand() % target_size;
@@ -84,7 +84,7 @@ void mutate(ga_struct& member) {
 	member.str[ipos] = GA_TABLE[(rand() % GA_TABLE.size())];
 }
 
-// селекция, скрещивание, мутация
+// СЃРµР»РµРєС†РёСЏ, СЃРєСЂРµС‰РёРІР°РЅРёРµ, РјСѓС‚Р°С†РёСЏ
 void mate(vector<ga_struct>& population, vector<ga_struct>& buffer) {
 	int best_size = GA_SIZE * GA_BEST;
 	int target_size = GA_TARGET.size();
@@ -109,12 +109,12 @@ void mate(vector<ga_struct>& population, vector<ga_struct>& buffer) {
 	}
 }
 
-//вывод лучшей популяции
+//РІС‹РІРѕРґ Р»СѓС‡С€РµР№ РїРѕРїСѓР»СЏС†РёРё
 inline void print_best(vector<ga_struct>& pop) {
 	cout << pop[0].str << " (" << pop[0].rating << ")" << endl;
 }
 
-// очистка буффера
+// РѕС‡РёСЃС‚РєР° Р±СѓС„С„РµСЂР°
 inline void swap(vector<ga_struct>*& population, vector<ga_struct>*& buffer) {
 	vector<ga_struct>* temp = population;
 	population = buffer;
@@ -123,8 +123,8 @@ inline void swap(vector<ga_struct>*& population, vector<ga_struct>*& buffer) {
 
 int main() {
 	srand(unsigned(time(NULL)));
-	setlocale(LC_ALL, "Russian"); // задаём русский текст
-	system("chcp 1251"); // настраиваем кодировку консоли
+	setlocale(LC_ALL, "Russian"); // Р·Р°РґР°С‘Рј СЂСѓСЃСЃРєРёР№ С‚РµРєСЃС‚
+	system("chcp 1251"); // РЅР°СЃС‚СЂР°РёРІР°РµРј РєРѕРґРёСЂРѕРІРєСѓ РєРѕРЅСЃРѕР»Рё
 
 	vector<ga_struct> pop_a, pop_b;
 	vector<ga_struct>* population, * buffer;
@@ -134,16 +134,16 @@ int main() {
 	buffer = &pop_b;
 
 	for (int i = 0; i < GA_MAXITER; i++) {
-		calc_rating(*population); // оцениваем популяцию
-		sort_by_rating(*population); // сортируем популяцию
-		print_best(*population); // выводим лучшую популяцию
+		calc_rating(*population); // РѕС†РµРЅРёРІР°РµРј РїРѕРїСѓР»СЏС†РёСЋ
+		sort_by_rating(*population); // СЃРѕСЂС‚РёСЂСѓРµРј РїРѕРїСѓР»СЏС†РёСЋ
+		print_best(*population); // РІС‹РІРѕРґРёРј Р»СѓС‡С€СѓСЋ РїРѕРїСѓР»СЏС†РёСЋ
 
 		if ((*population)[0].rating == 0) {
 			break;
 		}
 
-		mate(*population, *buffer); // спариваем популяции
-		swap(population, buffer); // очищаем буферы
+		mate(*population, *buffer); // СЃРїР°СЂРёРІР°РµРј РїРѕРїСѓР»СЏС†РёРё
+		swap(population, buffer); // РѕС‡РёС‰Р°РµРј Р±СѓС„РµСЂС‹
 	}
 
 	return 0;
